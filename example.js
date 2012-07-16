@@ -2,10 +2,11 @@ enchant();
 window.onload = function() {
   var game = new Game(320, 400);
   var tile = 32;//タイルサイズ
-  var point_num = 3;   //アイテムの数
+  var point_num = 3;//得点アイテムの数
+  var life_num = 3;//残機アイテムの数
   var enemy_num = 3;   //敵の数
   var enemy_spd = 1;   //敵の初期スピード
-  game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif');
+  game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif','bgm08.wav','se2.wav');
     game.onload = function() {
         var m_data  = new Array();  //表示用マップ領域
         var m_hit   = new Array();  //衝突判定用マップ領域
@@ -44,6 +45,10 @@ window.onload = function() {
         map.loadData(m_data);
         map.collisionData = m_hit;
         game.rootScene.addChild(map);
+
+       //BGMを鳴らす
+       bgm = game.assets['bgm08.wav'].clone();
+       bgm.play();
  
         //Ｐａｄ設定
         var pad = new Pad(); // Padを追加
@@ -108,17 +113,50 @@ window.onload = function() {
             //プレイヤーが接触したときの処理
             point.addEventListener('enterframe', function(e) {
                 if(this.intersect(player)){
-                    score += 1;
+                    score += 100;
                     var check = 1;
                     while(check){
                         this.x = Math.floor(Math.random()*17+1) * 16;   //Ｘ座標を乱数で入力
                         this.y = Math.floor(Math.random()*17+1) * 16;   //Ｙ座標を乱数で入力
                         if(!map.hitTest(this.x+8,this.y+8)){check=0;}   //指定した座標が壁だったらやりなおす。
                     }
+                 se1.assets = ['se2.wav']
+                  game.se2.play();
                 }
             });
             return point;
         }
+
+         //ライフ表示
+          
+
+         //残機アイテム作成関数
+        var create_life = function(e){
+            var life = new Sprite(16, 16);
+            life.image = game.assets['icon.gif'];
+            life.frame  = 10;
+            var check1 = 1;
+            while(check1){
+                life.x = Math.floor(Math.random()*17+1) * 16;  //Ｘ座標を乱数で入力
+                life.y = Math.floor(Math.random()*17+1) * 16;  //Ｙ座標を乱数で入力
+                if(!map.hitTest(life.x+8,life.y+8)){check1=0;} //指定した座標が壁だったらやりなおす。
+            }
+ 
+            //プレイヤーが接触したときの処理
+            life.addEventListener('enterframe', function(e) {
+                if(this.intersect(player)){
+                    score += 10;
+                    var check1 = 1;
+                    while(check){
+                        this.x = Math.floor(Math.random()*17+1) * 16;   //Ｘ座標を乱数で入力
+                        this.y = Math.floor(Math.random()*17+1) * 16;   //Ｙ座標を乱数で入力
+                        if(!map.hitTest(this.x+8,this.y+8)){check1=0;}   //指定した座標が壁だったらやりなおす。
+                    }
+                }
+            });
+            return life;
+        }
+
  
         //エネミー作成
         var create_enemy = function(e){
