@@ -3,11 +3,12 @@ window.onload = function() {
   var game = new Game(320, 400);
   var tile = 32;//タイルサイズ
   var point_num = 3;//得点アイテムの数
-  var life_num = 3;//残機アイテムの数
-  var enemy_num = 3;   //敵の数
+  var lifeUp_num = 3;//残機アイテムの数
+  var enemy_num = 5;   //敵の数
   var enemy_spd = 1;   //敵の初期スピード
   game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif','bgm08.wav','se2.wav');
     game.onload = function() {
+     //game.life = 3;
         var m_data  = new Array();  //表示用マップ領域
         var m_hit   = new Array();  //衝突判定用マップ領域
         //マップの初期化
@@ -49,6 +50,9 @@ window.onload = function() {
        //BGMを鳴らす
        bgm = game.assets['bgm08.wav'].clone();
        bgm.play();
+
+      //ライフ表示
+    // lifeLabel = new Mutabletext();
  
         //Ｐａｄ設定
         var pad = new Pad(); // Padを追加
@@ -57,7 +61,7 @@ window.onload = function() {
         game.rootScene.addChild(pad); // シーンに追加
  
         //プレイヤーの初期化
-        var player = new Sprite(16,24);
+        var player = new Sprite(32,32);
         player.image = game.assets['chara5.gif'];
         player.x     = tile*0.5;
         player.y     = 8;
@@ -78,8 +82,8 @@ window.onload = function() {
             if (game.input.down){ this.yy = this.y + p_spd;this.direction = 0;}
  
             //移動予定地this.xx,this.yyが壁かどうかを調べる。
-            var asobi = 4;  //遊び幅
-           if(!map.hitTest(this.xx+asobi,this.yy+8+asobi)&&!map.hitTest(this.xx+15-asobi,this.yy+8+asobi)&&!map.hitTest(this.xx+asobi,this.yy+23-asobi)&&!map.hitTest(this.xx+15-asobi,this.yy+23-asobi)){this.x=this.xx;this.y=this.yy;}
+            var asobi = 2;  //遊び幅
+           if(!map.hitTest(this.xx+asobi,this.yy+7.5+asobi)&&!map.hitTest(this.xx+14.5-asobi,this.yy+7.5+asobi)&&!map.hitTest(this.xx+asobi,this.yy+22.5-asobi)&&!map.hitTest(this.xx+14.5-asobi,this.yy+22.5-asobi)){this.x=this.xx;this.y=this.yy;}
  
             if (!(game.frame % a_spd)){this.walk++;}
             if(this.walk == 3){this.walk = 0;}
@@ -125,21 +129,18 @@ window.onload = function() {
                 }
             });
             return point;
-        }
-
-         //ライフ表示
-          
+        } 
 
          //残機アイテム作成関数
-        var create_life = function(e){
-            var life = new Sprite(16, 16);
-            life.image = game.assets['icon.gif'];
-            life.frame  = 10;
+        var create_lifeUp = function(e){
+            var lifeUp = new Sprite(16, 16);
+            lifeUp.image = game.assets['icon.gif'];
+            lifeUp.frame  = 10;
             var check1 = 1;
             while(check1){
-                life.x = Math.floor(Math.random()*17+1) * 16;  //Ｘ座標を乱数で入力
-                life.y = Math.floor(Math.random()*17+1) * 16;  //Ｙ座標を乱数で入力
-                if(!map.hitTest(life.x+8,life.y+8)){check1=0;} //指定した座標が壁だったらやりなおす。
+                lifeUp.x = Math.floor(Math.random()*17+1) * 16;  //Ｘ座標を乱数で入力
+                lifeUp.y = Math.floor(Math.random()*17+1) * 16;  //Ｙ座標を乱数で入力
+                if(!map.hitTest(lifeUp.x+8,lifeUp.y+8)){check1=0;} //指定した座標が壁だったらやりなおす。
             }
  
             //プレイヤーが接触したときの処理
@@ -154,13 +155,13 @@ window.onload = function() {
                     }
                 }
             });
-            return life;
+            return lifeUp;
         }
 
  
         //エネミー作成
         var create_enemy = function(e){
-            var enemy = new Sprite(16, 16);
+            var enemy = new Sprite(32, 32);
             enemy.image = game.assets['chara7.gif'];
             enemy.frame  = 11
             enemy.direction = Math.floor(Math.random()*4);      //初期の移動方向を指定
@@ -197,6 +198,7 @@ window.onload = function() {
             var point = create_point();
             game.rootScene.addChild(point);
         }
+
  
         for (var i = 0; i < enemy_num; i++) {
          //エネミー表示準備。
