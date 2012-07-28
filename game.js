@@ -1,6 +1,6 @@
 enchant();
 window.onload = function() {
-  var game = new Game(320, 400);
+  var game = new Game(320, 320);
   var tile = 32;//タイルサイズ
   var point_num = 3;//得点アイテムの数
   var lifeUp_num = 3;//残機アイテムの数
@@ -9,6 +9,19 @@ window.onload = function() {
   game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif','bgm08.wav','se2.wav');
     game.onload = function() {
      //game.life = 3;
+
+     var score = 0;      //点数の初期化
+       var state = new Label();
+        state.text = "Score:0";
+        state.color = "#000000";
+        state.x = 200;
+        state.y = 305;
+        game.rootScene.addChild(state);
+ 
+        state.addEventListener('enterframe', function(e) {
+          state.text = "Score:" + score;
+        });
+
         var m_data  = new Array();  //表示用マップ領域
         var m_hit   = new Array();  //衝突判定用マップ領域
         //マップの初期化
@@ -54,12 +67,7 @@ window.onload = function() {
       //ライフ表示
     // lifeLabel = new Mutabletext();
  
-        //Ｐａｄ設定
-        var pad = new Pad(); // Padを追加
-        pad.x = 0; // x座標
-        pad.y = 305; // y座標
-        game.rootScene.addChild(pad); // シーンに追加
- 
+    
         //プレイヤーの初期化
         var player = new Sprite(32,32);
         player.image = game.assets['chara5.gif'];
@@ -76,10 +84,10 @@ window.onload = function() {
         player.addEventListener('enterframe', function(e) {
             this.xx = this.x;
             this.yy = this.y;
-            if (game.input.left){this.xx = this.x - p_spd;this.direction = 1;}
-            if (game.input.right){this.xx = this.x + p_spd;this.direction = 2;}
-            if (game.input.up) {this.yy = this.y - p_spd;this.direction = 3;}
-            if (game.input.down){ this.yy = this.y + p_spd;this.direction = 0;}
+            if (game.input.left){this.xx = this.x - p_spd;this.direction = 2;} //左
+            if (game.input.right){this.xx = this.x + p_spd;this.direction = 3;} //右
+            if (game.input.up) {this.yy = this.y - p_spd;this.direction = 5;} //上
+            if (game.input.down){ this.yy = this.y + p_spd;this.direction = 0;} //下
  
             //移動予定地this.xx,this.yyが壁かどうかを調べる。
             var asobi = 2;  //遊び幅
@@ -90,17 +98,7 @@ window.onload = function() {
             this.frame = this.direction*6 + this.walk;
         });
  
-        var score = 0;      //点数の初期化
-        var state = new Label();
-        state.text = "Score:0";
-        state.color = "#000000";
-        state.x = 200;
-        state.y = 310;
-        game.rootScene.addChild(state);
- 
-        state.addEventListener('enterframe', function(e) {
-            state.text = "Score:" + score;
-        });
+      
  
         //得点アイテム作成関数
         var create_point = function(e){
