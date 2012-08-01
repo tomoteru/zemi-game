@@ -67,8 +67,9 @@ window.onload = function() {
     
         //プレイヤーの初期化
         var player = new Sprite(32,32);
+        player.scale(0.8,0.8);
         player.image = game.assets['chara5.gif'];
-        player.x     = tile*0.5;
+        player.x     = tile*0.3;
         player.y     = 8;
         game.rootScene.addChild(player);
 
@@ -83,26 +84,37 @@ window.onload = function() {
             this.yy = this.y;
             if (game.input.left){
 							this.xx = this.x - p_spd;this.direction = 2;
-							if(!map.hitTest(this.xx+0,this.yy+16)&&(this.xx+0,this.yy+32))
+ 							if(!map.hitTest(this.xx+0,this.yy+8)&& !map.hitTest(this.xx+0,this.yy+16)){
+          		this.x=this.xx;
+							this.y=this.yy;
+							}
 						} //左
             if (game.input.right){
 							this.xx = this.x + p_spd;this.direction = 3;
+							if(!map.hitTest(this.xx+16,this.yy+8)&& !map.hitTest(this.xx+16,this.yy+16)){
+          		this.x=this.xx;
+							this.y=this.yy;
+							}
 						} //右
             if (game.input.up) {
 							this.yy = this.y - p_spd;this.direction = 5;
+							if(!map.hitTest(this.xx+0,this.yy+16)&& !map.hitTest(this.xx+8,this.yy+16)&& !map.hitTest(this.xx+16,this.yy+16)){
+          		this.x=this.xx;
+							this.y=this.yy;
+							}
 						} //上
             if (game.input.down){
 							this.yy = this.y + p_spd;this.direction = 0;
+							if(!map.hitTest(this.xx+0,this.yy+16)&& !map.hitTest(this.xx+8,this.yy+16)&&(this.xx+16,this.yy+16)){
+          		this.x=this.xx;
+							this.y=this.yy;
+							}
 						} //下
  
             //移動予定地this.xx,this.yyが壁かどうかを調べる。
-           if(!map.hitTest(this.xx+0,this.yy+16)&&(this.xx+0,this.yy+32)&&
-						!map.hitTest(this.xx+32,this.yy+16)&&(this.xx+32,this.yy+32)&&
-						!map.hitTest(this.xx+0,this.yy+32)&&(this.xx+16,this.yy+32)&&(this.xx+32,this.yy+32)&&
-						!map.hitTest(this.xx+0,this.yy+32)&&(this.xx+16,this.yy+32)&&(this.xx+32,this.yy+32)){
-          		this.x=this.xx;
-							this.y=this.yy;
-						}
+         
+          		//this.x=this.xx;
+							//this.y=this.yy;
  
             if (!(game.frame % a_spd)){this.walk++;}
             if(this.walk == 3){this.walk = 0;}
