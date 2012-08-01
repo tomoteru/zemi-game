@@ -1,6 +1,7 @@
 enchant();
 window.onload = function() {
   var game = new Game(320, 320);
+  game.fps = 32;
   var tile = 32;//タイルサイズ
   var point_num = 3;//得点アイテムの数
   var enemy_num = 5;   //敵の数
@@ -8,7 +9,7 @@ window.onload = function() {
   game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif','bgm08.wav','se2.wav');
     game.onload = function() {
 
-     var score = 0;      //点数の初期化
+     var score = 5000;      //点数の初期化
        var state = new Label();
         state.text = "Life:5000";
         state.color = "#000000";
@@ -18,6 +19,7 @@ window.onload = function() {
  
         state.addEventListener('enterframe', function(e) {
           state.text = "Life:" + score;
+          
         });
 
         var m_data  = new Array();  //表示用マップ領域
@@ -79,14 +81,28 @@ window.onload = function() {
         player.addEventListener('enterframe', function(e) {
             this.xx = this.x;
             this.yy = this.y;
-            if (game.input.left){this.xx = this.x - p_spd;this.direction = 2;} //左
-            if (game.input.right){this.xx = this.x + p_spd;this.direction = 3;} //右
-            if (game.input.up) {this.yy = this.y - p_spd;this.direction = 5;} //上
-            if (game.input.down){ this.yy = this.y + p_spd;this.direction = 0;} //下
+            if (game.input.left){
+							this.xx = this.x - p_spd;this.direction = 2;
+							if(!map.hitTest(this.xx+0,this.yy+16)&&(this.xx+0,this.yy+32))
+						} //左
+            if (game.input.right){
+							this.xx = this.x + p_spd;this.direction = 3;
+						} //右
+            if (game.input.up) {
+							this.yy = this.y - p_spd;this.direction = 5;
+						} //上
+            if (game.input.down){
+							this.yy = this.y + p_spd;this.direction = 0;
+						} //下
  
             //移動予定地this.xx,this.yyが壁かどうかを調べる。
-            var asobi = 2;  //遊び幅
-           if(!map.hitTest(this.xx+asobi,this.yy+8+asobi)&&!map.hitTest(this.xx+15-asobi,this.yy+8+asobi)&&!map.hitTest(this.xx+asobi,this.yy+23-asobi)&&!map.hitTest(this.xx+15-asobi,this.yy+23-asobi)){this.x=this.xx;this.y=this.yy;}
+           if(!map.hitTest(this.xx+0,this.yy+16)&&(this.xx+0,this.yy+32)&&
+						!map.hitTest(this.xx+32,this.yy+16)&&(this.xx+32,this.yy+32)&&
+						!map.hitTest(this.xx+0,this.yy+32)&&(this.xx+16,this.yy+32)&&(this.xx+32,this.yy+32)&&
+						!map.hitTest(this.xx+0,this.yy+32)&&(this.xx+16,this.yy+32)&&(this.xx+32,this.yy+32)){
+          		this.x=this.xx;
+							this.y=this.yy;
+						}
  
             if (!(game.frame % a_spd)){this.walk++;}
             if(this.walk == 3){this.walk = 0;}
@@ -94,13 +110,12 @@ window.onload = function() {
         });
 
        //鍵アイテム作成
-      //  var key = new Sprite(16,16);
-        //key.image = game.assets["icon.gif"];
-       // key.frame = 35;
-       // key.x = tile * 0.5;
-        //key.y = 8;
-        //game.rootScene.addChild(key);
- 
+        var key = new Sprite(16,16);
+        key.image = game.assets["icon.gif"];
+        key.frame = 33;
+        key.x = tile * 0.5;
+        key.y = 8;
+         
         //Lifeアイテム作成関数
         var create_point = function(e){
             var point = new Sprite(16, 16);
@@ -177,6 +192,9 @@ window.onload = function() {
             var enemy = create_enemy();
             game.rootScene.addChild(enemy);
         }
+          
+         game.rootScene.addChild(key);
+
  
         //難易度調整 一定時間毎に敵の速度を上げる。
         game.addEventListener('enterframe', function(e) {
