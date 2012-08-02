@@ -194,13 +194,17 @@ window.onload = function() {
                 this.xx = this.x;
                 this.yy = this.y;
                 if(this.direction == 0){
-									this.yy = this.y+enemy_spd;}
+									this.yy = this.y+enemy_spd;
+									}
                 if(this.direction == 1){
-									this.xx = this.x-enemy_spd;}
+									this.xx = this.x-enemy_spd;
+									}
                 if(this.direction == 2){
-									this.xx = this.x+enemy_spd;}
+									this.xx = this.x+enemy_spd;
+									}
                 if(this.direction == 3){
-									this.yy = this.y-enemy_spd;}
+									this.yy = this.y-enemy_spd;
+									}
                 if(!map.hitTest(this.xx+2,this.yy+2)&&!map.hitTest(this.xx+28,this.yy+28)){
                     this.x = this.xx;
                     this.y = this.yy;
