@@ -6,7 +6,7 @@ window.onload = function() {
   var point_num = 3;//得点アイテムの数
   var enemy_num = 5;   //敵の数
   var enemy_spd = 1;   //敵の初期スピード
-  game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif','bgm08.wav','se2.wav');
+  game.preload('map0.gif', 'chara5.gif','chara7.gif','pad.png','icon.gif');
     game.onload = function() {
 
      var score = 5000;      //点数の初期化
@@ -76,10 +76,7 @@ window.onload = function() {
         map.collisionData = m_hit2;
         game.rootScene.addChild(map);
 
-       //BGMを鳴らす
-       bgm = game.assets['bgm08.wav'].clone();
-       bgm.play();
-
+      
     
         //プレイヤーの初期化
         var player = new Sprite(32,32);
@@ -164,8 +161,6 @@ window.onload = function() {
 													check=0;
 													}   //指定した座標が壁だったらやりなおす。
                     }
-                se = game.assets = ['se2.wav'].clone();
-                  game.se2.play();
                 }
             });
             return point;
