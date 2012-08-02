@@ -164,7 +164,7 @@ window.onload = function() {
 													check=0;
 													}   //指定した座標が壁だったらやりなおす。
                     }
-                 se1.assets = ['se2.wav']
+                se = game.assets = ['se2.wav'].clone();
                   game.se2.play();
                 }
             });
@@ -173,15 +173,15 @@ window.onload = function() {
 
         //エネミー作成
         var create_enemy = function(e){
-            var enemy = new Sprite(32, 32);
-            enemy.image = game.assets['chara7.gif'];
-            
+            var enemy = new Sprite(16, 16);
+            enemy.image = game.assets['icon.gif'];
+            enemy.frame = 11;
             enemy.direction = Math.floor(Math.random()*4);      //初期の移動方向を指定
             var check = 1;
             while(check){
                 enemy.x = Math.floor(Math.random()*17+1) * 16;  //Ｘ座標を乱数で入力
                 enemy.y = Math.floor(Math.random()*17+1) * 16;  //Ｙ座標を乱数で入力
-                if(!map.hitTest(enemy.x+16,enemy.y+16) && !map.hitTest(enemy.x+0,enemy.y+0) && !map.hitTest(enemy.x+32,enemy.y+32)){
+                if(!map.hitTest(enemy.x+8,enemy.y+8) && !map.hitTest(enemy.x+0,enemy.y+0) && !map.hitTest(enemy.x+16,enemy.y+16)){
 								check=0;
 								} //指定した座標が壁だったらやりなおす。
             }
@@ -195,17 +195,17 @@ window.onload = function() {
                 this.yy = this.y;
                 if(this.direction == 0){
 									this.yy = this.y+enemy_spd;
-									}
+								}
                 if(this.direction == 1){
 									this.xx = this.x-enemy_spd;
-									}
+								}
                 if(this.direction == 2){
 									this.xx = this.x+enemy_spd;
-									}
+								}
                 if(this.direction == 3){
 									this.yy = this.y-enemy_spd;
-									}
-                if(!map.hitTest(this.xx+2,this.yy+2)&&!map.hitTest(this.xx+28,this.yy+28)){
+								}
+                if(!map.hitTest(this.xx+2,this.yy+2)&&!map.hitTest(this.xx+14,this.yy+14)){
                     this.x = this.xx;
                     this.y = this.yy;
                 }else{
@@ -235,7 +235,7 @@ window.onload = function() {
         game.addEventListener('enterframe', function(e) {
             if(this.frame == 900){enemy_spd++;}
             if(this.frame == 1800){enemy_spd++;}
-            if(this.frame == 5400){enemy_spd++;}
+            if(this.frame == 3400){enemy_spd++;}
         });
     }
     game.start();
